@@ -1,3 +1,5 @@
+function gam() { "$HOME/bin/gam/gam" "$@" ; }
+
 export FILEPATH=$(realpath $0)
 export PROJECT_DIR=$(dirname $FILEPATH)
 
@@ -8,14 +10,25 @@ fi
 mkdir -p $PROJECT_DIR/data
 mkdir -p $PROJECT_DIR/log
 
+printf "Extracting user files from database...\n"
+cd $DATAGUN_DIR
+./bin/qgtunnel $DATAGUN_VIRTUALENV ./extract.py -C ./config/gapps.json
+printf "\n"
+
+cd $HOME
+
 printf "Exporting existing users from Google to $GAM_USERS_EXPORT_FILE\n"
 gam print users domain $GOOGLE_STUDENTS_DOMAIN suspended > $GAM_USERS_EXPORT_FILE
 printf "\n"
 
-python $PROJECT_DIR/prep-gam-user-files.py
+printf "Exporting existing admins from Google to $GAM_ADMINS_EXPORT_FILE\n"
+gam print admins role "Reset Student PW" > $GAM_ADMINS_EXPORT_FILE
+printf "\n"
+
+python $PROJECT_DIR/prep-gam-files.py
 
 printf "Creating users..."
-for i in $PROJECT_DIR/data/create_*.csv; do
+for i in $PROJECT_DIR/data/user_create_*.csv; do
     if [ -f $i ]; then
         printf "\n$i\n"
 
@@ -40,7 +53,7 @@ done
 printf "\n\n"
 
 printf "Updating users w/ pw..."
-for i in $PROJECT_DIR/data/update_pw_*.csv; do
+for i in $PROJECT_DIR/data/user_update_pw_*.csv; do
     if [ -f $i ]; then
         printf "\n$i\n"
         
@@ -64,7 +77,7 @@ done
 printf "\n\n"
 
 printf "Updating users w/o pw..."
-for i in $PROJECT_DIR/data/update_nopw_*.csv; do
+for i in $PROJECT_DIR/data/user_update_nopw_*.csv; do
     if [ -f $i ]; then
         printf "\n$i\n"
         
@@ -86,7 +99,35 @@ for i in $PROJECT_DIR/data/update_nopw_*.csv; do
 done
 printf "\n\n"
 
-echo Adding students to groups...
-gam update group group-students-miami@teamstudents.org sync member notsuspended nomail ou_and_children "/Students/Miami" > ./log/update_group_students_miami.log
-gam update group group-students-camden@teamstudents.org sync member notsuspended nomail ou_and_children "/Students/KCNA" > ./log/update_group_students_camden.log
-gam update group group-students-newark@teamstudents.org sync member notsuspended nomail ou_and_children "/Students/TEAM" > ./log/update_group_students_newark.log
+printf "Syncing user group membership...\n"
+for i in $PROJECT_DIR/data/group_*.csv; do
+    if [ -f $i ]; then
+        filename=$(basename -- "$i")
+        filename="${filename%.*}"
+
+        gam csv $i \
+        gam update \
+            group ~group_email \
+            sync member notsuspended nomail \
+            ou_and_children "/Students/~~region~~"
+                > $PROJECT_DIR/log/$filename.log \
+                2> $PROJECT_DIR/log/$filename-error.log
+    fi
+done
+printf "\n\n"
+
+printf "Updating Reset Student PW admins..."
+for i in $PROJECT_DIR/data/admin_create_*.csv; do
+    if [ -f $i ]; then
+        filename=$(basename -- "$i")
+        filename="${filename%.*}"
+
+        gam csv $i \
+        gam create \
+            admin ~user \
+            "Reset Student PW" \
+            org_unit "~~OU~~" \
+                > $PROJECT_DIR/log/$filename.log \
+                2> $PROJECT_DIR/log/$filename-error.log
+    fi
+done
