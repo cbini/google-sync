@@ -25,7 +25,7 @@ printf "Exporting existing admins from Google to $GAM_ADMINS_EXPORT_FILE\n"
 gam print admins role "Reset Student PW" > $GAM_ADMINS_EXPORT_FILE
 printf "\n"
 
-python $PROJECT_DIR/prep-gam-files.py
+$GOOGLESYNC_VIRTUALENV $PROJECT_DIR/prep-gam-files.py
 
 printf "Creating users..."
 for i in $PROJECT_DIR/data/user_create_*.csv; do
