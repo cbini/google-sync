@@ -29,15 +29,20 @@ printf "\n"
 
 $GOOGLESYNC_VIRTUALENV $PROJECT_DIR/prep-gam-files.py
 
-printf "Creating users..."
-for i in $PROJECT_DIR/data/user_create_*.csv; do
-    if [ -f $i ]; then
-        printf "\n$i\n"
+for dir in $PROJECT_DIR/data/*/; 
+do
+    dir=${dir%*/}
+    region=${dir##*/}
 
-        filename=$(basename -- "$i")
+    printf "Creating users..."
+    create_file=$dir/user_create.csv
+    if [ -f $create_file ]; then
+        printf "\n$create_file\n"
+
+        filename=$(basename -- "$create_file")
         filename="${filename%.*}"
 
-        gam csv $i \
+        gam csv $create_file \
         gam create \
             user ~email \
             firstname ~firstname \
@@ -45,24 +50,21 @@ for i in $PROJECT_DIR/data/user_create_*.csv; do
             suspended ~suspended_x \
             org ~org \
             password ~password \
-            changepassword ~changepassword \
-                > $PROJECT_DIR/log/$filename.log \
-                2> $PROJECT_DIR/log/$filename-error.log
+            changepassword ~changepassword
     else
         printf "\nNo users to create!"
     fi
-done
-printf "\n\n"
+    printf "\n\n"
 
-printf "Updating users w/ pw..."
-for i in $PROJECT_DIR/data/user_update_pw_*.csv; do
-    if [ -f $i ]; then
-        printf "\n$i\n"
+    printf "Updating users w/ pw..."
+    update_pw_file=$dir/user_update_pw.csv
+    if [ -f $update_pw_file ]; then
+        printf "\n$update_pw_file\n"
         
-        filename=$(basename -- "$i")
+        filename=$(basename -- "$update_pw_file")
         filename="${filename%.*}"
 
-        gam csv $i \
+        gam csv $update_pw_file \
         gam update \
             user ~primaryEmail \
             firstname ~firstname \
@@ -70,66 +72,62 @@ for i in $PROJECT_DIR/data/user_update_pw_*.csv; do
             suspended ~suspended_x \
             org ~org \
             password ~password \
-                > $PROJECT_DIR/log/$filename.log \
-                2> $PROJECT_DIR/log/$filename-error.log
+                > $PROJECT_DIR/log/$region/$filename.log \
+                2> $PROJECT_DIR/log/$region/$filename-error.log
     else
         printf "\nNo users to update w/ pw!"
     fi
-done
-printf "\n\n"
+    printf "\n\n"
 
-printf "Updating users w/o pw..."
-for i in $PROJECT_DIR/data/user_update_nopw_*.csv; do
-    if [ -f $i ]; then
-        printf "\n$i\n"
+    printf "Updating users w/o pw..."
+    update_nopw_file=$dir/user_update_nopw.csv
+    if [ -f $update_nopw_file ]; then
+        printf "\n$update_nopw_file\n"
         
-        filename=$(basename -- "$i")
+        filename=$(basename -- "$update_nopw_file")
         filename="${filename%.*}"
 
-        gam csv $i \
+        gam csv $update_nopw_file \
         gam update \
             user ~primaryEmail \
             firstname ~firstname \
             lastname ~lastname \
             suspended ~suspended_x \
             org ~org \
-                > $PROJECT_DIR/log/$filename.log \
-                2> $PROJECT_DIR/log/$filename-error.log
+                > $PROJECT_DIR/log/$region/$filename.log \
+                2> $PROJECT_DIR/log/$region/$filename-error.log
     else
         printf "\nNo users to update w/o pw!"
     fi
-done
-printf "\n\n"
+    printf "\n\n"
 
-printf "Syncing user group membership...\n"
-for i in $PROJECT_DIR/data/group_*.csv; do
-    if [ -f $i ]; then
-        filename=$(basename -- "$i")
+    printf "Syncing user group membership...\n"
+    group_file=$dir/group.csv
+    if [ -f $group_file ]; then
+        filename=$(basename -- "$group_file")
         filename="${filename%.*}"
 
-        gam csv $i \
+        gam csv $group_file \
         gam update \
             group ~group_email \
             sync member notsuspended nomail \
-            ou_and_children "/Students/~~region~~" \
-                > $PROJECT_DIR/log/$filename.log \
-                2> $PROJECT_DIR/log/$filename-error.log
+            ou_and_children "/Students/~~region~~"
     fi
-done
-printf "\n\n"
+    printf "\n\n"
 
-printf "Updating Reset Student PW admins..."
-for i in $PROJECT_DIR/data/admin_create_*.csv; do
-    if [ -f $i ]; then
-        filename=$(basename -- "$i")
+    printf "Creating Reset Student PW admins..."
+    admin_file=$dir/admin_create.csv
+    if [ -f $admin_file ]; then
+        filename=$(basename -- "$admin_file")
         filename="${filename%.*}"
 
-        gam csv $i \
+        gam csv $admin_file \
         gam create \
             admin ~user \
             "Reset Student PW" \
-            org_unit "~~OU~~" \
-                > $PROJECT_DIR/log/$filename.log \
-                2> $PROJECT_DIR/log/$filename-error.log
+            org_unit "~~OU~~"
+    else
+        printf "\nNo admins to create!"
     fi
+    printf "\n\n"
 done

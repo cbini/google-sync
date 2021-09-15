@@ -18,7 +18,11 @@ def split_and_save(df, group_col, base_filename):
     if df.shape[0] > 0:
         print(f"Saving {base_filename} files...")
         for v, d in df.groupby(group_col):
-            filepath = PROJECT_PATH / "data" / f"{base_filename}_{v.lower()}.csv"
+            data_path = PROJECT_PATH / "data" / v.lower()
+            if not data_path.exists():
+                data_path.mkdir(parents=True)
+
+            filepath = data_path / f"{base_filename}.csv"
             d.to_csv(filepath, index=False)
             print(f"\t{filepath}")
         print()
@@ -103,4 +107,4 @@ admins_merge_df["google_exists"] = admins_merge_df.assignedToUser.apply(pd.notnu
 
 # admins to CREATE
 admins_create_df = admins_merge_df[admins_merge_df.google_exists == False]
-split_and_save(admins_create_df, "db_name", "admin_create")
+split_and_save(admins_create_df, "region", "admin_create")
