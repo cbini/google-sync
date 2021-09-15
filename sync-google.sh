@@ -7,6 +7,8 @@ if [ -f $PROJECT_DIR/.env ]; then
     . $PROJECT_DIR/.env
 fi
 
+export GAM_THREADS=$GAM_THREADS
+
 mkdir -p $PROJECT_DIR/data
 mkdir -p $PROJECT_DIR/log
 
