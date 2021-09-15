@@ -109,7 +109,7 @@ for i in $PROJECT_DIR/data/group_*.csv; do
         gam update \
             group ~group_email \
             sync member notsuspended nomail \
-            ou_and_children "/Students/~~region~~"
+            ou_and_children "/Students/~~region~~" \
                 > $PROJECT_DIR/log/$filename.log \
                 2> $PROJECT_DIR/log/$filename-error.log
     fi
