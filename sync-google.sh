@@ -57,7 +57,7 @@ do
 
         rm $create_file
     else
-        printf "No users to create!\n"
+        printf "\tNo users to create!\n"
     fi
     printf "\n"
 
@@ -89,7 +89,7 @@ do
 
         rm $admin_file
     else
-        printf "No admins to create!\n"
+        printf "\tNo admins to create!\n"
     fi
     printf "\n"
 done
@@ -122,7 +122,7 @@ do
         
         rm $update_pw_file
     else
-        printf "No users to update w/ pw!\n"
+        printf "\tNo users to update w/ pw!\n"
     fi
     printf "\n"
 
@@ -145,7 +145,7 @@ do
         
         rm $update_nopw_file
     else
-        printf "No users to update w/o pw!\n"
+        printf "\tNo users to update w/o pw!\n"
     fi
     printf "\n"
 done

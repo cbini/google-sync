@@ -15,8 +15,8 @@ PROJECT_PATH = pathlib.Path(__file__).absolute().parent
 
 
 def split_and_save(df, group_col, base_filename):
-    if df.shape[0] > 0:
-        print(f"Saving {base_filename} files...")
+    print(f"Saving {base_filename} files...")
+    if df.shape[0] > 0:        
         for v, d in df.groupby(group_col):
             data_path = PROJECT_PATH / "data" / v.lower()
             if not data_path.exists():
@@ -27,7 +27,7 @@ def split_and_save(df, group_col, base_filename):
             print(f"\t{filepath}")
         print()
     else:
-        print(f"No {base_filename} records to save!\n")
+        print(f"\tNo {base_filename} records to save!\n")
 
 
 pd.options.mode.chained_assignment = None
