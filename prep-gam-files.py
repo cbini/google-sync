@@ -15,16 +15,19 @@ PROJECT_PATH = pathlib.Path(__file__).absolute().parent
 
 
 def split_and_save(df, group_col, base_filename):
-    print(f"Saving {base_filename} files...")
-    for v, d in df.groupby(group_col):
-        data_path = PROJECT_PATH / "data" / v.lower()
-        if not data_path.exists():
-            data_path.mkdir(parents=True)
+    if df.shape[0] > 0:
+        print(f"Saving {base_filename} files...")
+        for v, d in df.groupby(group_col):
+            data_path = PROJECT_PATH / "data" / v.lower()
+            if not data_path.exists():
+                data_path.mkdir(parents=True)
 
-        filepath = data_path / f"{base_filename}.csv"
-        d.to_csv(filepath, index=False)
-        print(f"\t{filepath}")
-    print()
+            filepath = data_path / f"{base_filename}.csv"
+            d.to_csv(filepath, index=False)
+            print(f"\t{filepath}")
+        print()
+    else:
+        print(f"No {base_filename} records to save!\n")
 
 
 pd.options.mode.chained_assignment = None
@@ -50,6 +53,9 @@ users_merge_df = pd.merge(
     right_on="primaryEmail",
 )
 users_merge_df["google_exists"] = users_merge_df.primaryEmail.apply(pd.notnull)
+users_merge_df["suspended_x_bool"] = users_merge_df.suspended_x.apply(
+    lambda x: True if x == "on" else False
+)
 
 # filter out completely inactive
 users_merge_df = users_merge_df[
@@ -62,7 +68,15 @@ users_create_df = users_create_df[users_create_df.suspended_x == "off"]
 split_and_save(users_create_df, "region", "user_create")
 
 # users to UPDATE (all)
-users_update_df = users_merge_df[users_merge_df.google_exists == True]
+users_update_df = users_merge_df[
+    (users_merge_df.google_exists == True)
+    & (
+        (users_merge_df["firstname"] != users_merge_df["name.givenName"])
+        | (users_merge_df["lastname"] != users_merge_df["name.familyName"])
+        | (users_merge_df["org"] != users_merge_df["orgUnitPath"])
+        | (users_merge_df["suspended_x_bool"] != users_merge_df["suspended_y"])
+    )
+]
 users_update_df["changepassword"] = "off"
 
 # users to UPDATE (with password)

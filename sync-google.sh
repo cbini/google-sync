@@ -20,7 +20,7 @@ printf "\n"
 cd $HOME
 
 printf "Exporting existing users from Google to $GAM_USERS_EXPORT_FILE\n"
-gam print users domain $GOOGLE_STUDENTS_DOMAIN suspended > $GAM_USERS_EXPORT_FILE
+gam print users domain $GOOGLE_STUDENTS_DOMAIN firstname lastname ou suspended > $GAM_USERS_EXPORT_FILE
 printf "\n"
 
 printf "Exporting existing admins from Google to $GAM_ADMINS_EXPORT_FILE\n"
@@ -54,53 +54,10 @@ do
             org ~org \
             password ~password \
             changepassword ~changepassword
+
+        rm $create_file
     else
         printf "\nNo users to create!"
-    fi
-    printf "\n\n"
-
-    printf "Updating users w/ pw..."
-    update_pw_file=$dir/user_update_pw.csv
-    if [ -f $update_pw_file ]; then
-        printf "\n$update_pw_file\n"
-        
-        filename=$(basename -- "$update_pw_file")
-        filename="${filename%.*}"
-
-        gam csv $update_pw_file \
-        gam update \
-            user ~primaryEmail \
-            firstname ~firstname \
-            lastname ~lastname \
-            suspended ~suspended_x \
-            org ~org \
-            password ~password \
-                > $PROJECT_DIR/log/$region/$filename.log \
-                2> $PROJECT_DIR/log/$region/$filename-error.log
-    else
-        printf "\nNo users to update w/ pw!"
-    fi
-    printf "\n\n"
-
-    printf "Updating users w/o pw..."
-    update_nopw_file=$dir/user_update_nopw.csv
-    if [ -f $update_nopw_file ]; then
-        printf "\n$update_nopw_file\n"
-        
-        filename=$(basename -- "$update_nopw_file")
-        filename="${filename%.*}"
-
-        gam csv $update_nopw_file \
-        gam update \
-            user ~primaryEmail \
-            firstname ~firstname \
-            lastname ~lastname \
-            suspended ~suspended_x \
-            org ~org \
-                > $PROJECT_DIR/log/$region/$filename.log \
-                2> $PROJECT_DIR/log/$region/$filename-error.log
-    else
-        printf "\nNo users to update w/o pw!"
     fi
     printf "\n\n"
 
@@ -129,8 +86,66 @@ do
             admin ~user \
             "Reset Student PW" \
             org_unit "~~OU~~"
+
+        rm $admin_file
     else
         printf "\nNo admins to create!"
+    fi
+    printf "\n\n"
+done
+
+for dir in $PROJECT_DIR/data/*/; 
+do
+    dir=${dir%*/}
+    region=${dir##*/}
+
+    mkdir -p $PROJECT_DIR/data/$region
+    mkdir -p $PROJECT_DIR/log/$region
+
+    printf "Updating users w/ pw..."
+    update_pw_file=$dir/user_update_pw.csv
+    if [ -f $update_pw_file ]; then
+        printf "\n$update_pw_file\n"
+        
+        filename=$(basename -- "$update_pw_file")
+        filename="${filename%.*}"
+
+        gam csv $update_pw_file \
+        gam update \
+            user ~primaryEmail \
+            firstname ~firstname \
+            lastname ~lastname \
+            suspended ~suspended_x \
+            org ~org \
+            password ~password \
+                > $PROJECT_DIR/log/$region/$filename.log
+        
+        rm $update_pw_file
+    else
+        printf "\nNo users to update w/ pw!"
+    fi
+    printf "\n\n"
+
+    printf "Updating users w/o pw..."
+    update_nopw_file=$dir/user_update_nopw.csv
+    if [ -f $update_nopw_file ]; then
+        printf "\n$update_nopw_file\n"
+        
+        filename=$(basename -- "$update_nopw_file")
+        filename="${filename%.*}"
+
+        gam csv $update_nopw_file \
+        gam update \
+            user ~primaryEmail \
+            firstname ~firstname \
+            lastname ~lastname \
+            suspended ~suspended_x \
+            org ~org \
+                > $PROJECT_DIR/log/$region/$filename.log
+        
+        rm $update_nopw_file
+    else
+        printf "\nNo users to update w/o pw!"
     fi
     printf "\n\n"
 done
