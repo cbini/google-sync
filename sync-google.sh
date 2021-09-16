@@ -34,6 +34,9 @@ do
     dir=${dir%*/}
     region=${dir##*/}
 
+    mkdir -p $PROJECT_DIR/data/$region
+    mkdir -p $PROJECT_DIR/log/$region
+
     printf "Creating users..."
     create_file=$dir/user_create.csv
     if [ -f $create_file ]; then
