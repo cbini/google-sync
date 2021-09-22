@@ -14,7 +14,7 @@ mkdir -p $PROJECT_DIR/log
 
 printf "Extracting user files from database...\n"
 cd $DATAGUN_DIR
-./bin/qgtunnel $DATAGUN_VIRTUALENV ./extract.py -C ./config/gapps.json
+./bin/qgtunnel $DATAGUN_VIRTUALENV ./datagun/extract.py -C ./datagun/config/gapps.json
 printf "\n"
 
 cd $HOME
