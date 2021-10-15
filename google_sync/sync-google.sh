@@ -3,8 +3,8 @@ function gam() { "$HOME/bin/gam/gam" "$@" ; }
 export FILEPATH=$(realpath $0)
 export PROJECT_DIR=$(dirname $FILEPATH)
 
-if [ -f $PROJECT_DIR/.env ]; then
-    . $PROJECT_DIR/.env
+if [ -f $PROJECT_DIR/../.env ]; then
+    . $PROJECT_DIR/../.env
 fi
 
 export GAM_THREADS=$GAM_THREADS
@@ -29,7 +29,7 @@ printf "\n"
 
 $GOOGLESYNC_VIRTUALENV $PROJECT_DIR/prep-gam-files.py
 
-for dir in $PROJECT_DIR/data/*/; 
+for dir in $PROJECT_DIR/data/*/;
 do
     dir=${dir%*/}
     region=${dir##*/}
@@ -94,7 +94,7 @@ do
     printf "\n"
 done
 
-for dir in $PROJECT_DIR/data/*/; 
+for dir in $PROJECT_DIR/data/*/;
 do
     dir=${dir%*/}
     region=${dir##*/}
@@ -106,7 +106,7 @@ do
     update_pw_file=$dir/user_update_pw.csv
     if [ -f $update_pw_file ]; then
         printf "$update_pw_file\n"
-        
+
         filename=$(basename -- "$update_pw_file")
         filename="${filename%.*}"
 
@@ -119,7 +119,7 @@ do
             org ~org \
             password ~password \
                 > $PROJECT_DIR/log/$region/$filename.log
-        
+
         rm $update_pw_file
     else
         printf "\tNo users to update w/ pw!\n"
@@ -130,7 +130,7 @@ do
     update_nopw_file=$dir/user_update_nopw.csv
     if [ -f $update_nopw_file ]; then
         printf "$update_nopw_file\n"
-        
+
         filename=$(basename -- "$update_nopw_file")
         filename="${filename%.*}"
 
@@ -142,7 +142,7 @@ do
             suspended ~suspended_x \
             org ~org \
                 > $PROJECT_DIR/log/$region/$filename.log
-        
+
         rm $update_nopw_file
     else
         printf "\tNo users to update w/o pw!\n"
