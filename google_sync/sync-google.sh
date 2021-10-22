@@ -117,8 +117,7 @@ do
             lastname ~lastname \
             suspended ~suspended_x \
             org ~org \
-            password ~password \
-                > $PROJECT_DIR/log/$region/$filename.log
+            password ~password
 
         rm $update_pw_file
     else
@@ -140,8 +139,7 @@ do
             firstname ~firstname \
             lastname ~lastname \
             suspended ~suspended_x \
-            org ~org \
-                > $PROJECT_DIR/log/$region/$filename.log
+            org ~org
 
         rm $update_nopw_file
     else
