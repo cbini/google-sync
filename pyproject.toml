@@ -7,9 +7,7 @@ authors = [
 ]
 license-expression = "MIT"
 dependencies = [
-    "pandas>=1.4.1",
-    "python-dotenv>=0.19.2",
-]
+    "pandas>=1.4.1"]
 requires-python = ">=3.9"
 
 [project.urls]
@@ -28,3 +26,9 @@ dev = [
 [build-system]
 requires = ["pdm-pep517>=0.12.0"]
 build-backend = "pdm.pep517.api"
+
+[tool.pdm.scripts]
+transform.cmd = "python google_sync/prep-gam-files.py"
+transform.env_file = ".env"
+sync.cmd = "bash ./google_sync/sync-google.sh"
+sync.env_file = ".env"

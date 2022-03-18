@@ -2,9 +2,6 @@ import os
 import pathlib
 
 import pandas as pd
-from dotenv import load_dotenv
-
-load_dotenv()
 
 GAM_USERS_EXPORT_FILE = os.getenv("GAM_USERS_EXPORT_FILE").replace("$HOME", "~")
 DB_USERS_EXPORT_FILE = os.getenv("DB_USERS_EXPORT_FILE").replace("$HOME", "~")
