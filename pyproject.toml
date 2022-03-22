@@ -28,7 +28,8 @@ requires = ["pdm-pep517>=0.12.0"]
 build-backend = "pdm.pep517.api"
 
 [tool.pdm.scripts]
+_.env_file = ".env"
 transform.cmd = "python google_sync/prep-gam-files.py"
-transform.env_file = ".env"
+transform.site_packages = true
 sync.cmd = "bash ./google_sync/sync-google.sh"
-sync.env_file = ".env"
+transform.site_packages = true
