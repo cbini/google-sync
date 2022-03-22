@@ -27,121 +27,121 @@ printf "Transforming final sync file\n"
 pdm run transform
 printf "\n"
 
-# for dir in $PROJECT_DIR/data/*/;
-# do
-#     dir=${dir%*/}
-#     region=${dir##*/}
+for dir in $PROJECT_DIR/data/*/;
+do
+    dir=${dir%*/}
+    region=${dir##*/}
 
-#     mkdir -p $PROJECT_DIR/data/$region
-#     mkdir -p $PROJECT_DIR/log/$region
+    mkdir -p $PROJECT_DIR/data/$region
+    mkdir -p $PROJECT_DIR/log/$region
 
-#     printf "$region - Creating users...\n"
-#     create_file=$dir/user_create.csv
-#     if [ -f $create_file ]; then
-#         printf "$create_file\n"
+    printf "$region - Creating users...\n"
+    create_file=$dir/user_create.csv
+    if [ -f $create_file ]; then
+        printf "$create_file\n"
 
-#         filename=$(basename -- "$create_file")
-#         filename="${filename%.*}"
+        filename=$(basename -- "$create_file")
+        filename="${filename%.*}"
 
-#         gam csv $create_file \
-#         gam create \
-#             user ~email \
-#             firstname ~firstname \
-#             lastname ~lastname \
-#             suspended ~suspended_x \
-#             org ~org \
-#             password ~password \
-#             changepassword ~changepassword
+        gam csv $create_file \
+        gam create \
+            user ~email \
+            firstname ~firstname \
+            lastname ~lastname \
+            suspended ~suspended_x \
+            org ~org \
+            password ~password \
+            changepassword ~changepassword
 
-#         rm $create_file
-#     else
-#         printf "\tNo users to create!\n"
-#     fi
-#     printf "\n"
+        rm $create_file
+    else
+        printf "\tNo users to create!\n"
+    fi
+    printf "\n"
 
-#     printf "$region - Syncing user group membership...\n"
-#     group_file=$dir/group.csv
-#     if [ -f $group_file ]; then
-#         filename=$(basename -- "$group_file")
-#         filename="${filename%.*}"
+    printf "$region - Syncing user group membership...\n"
+    group_file=$dir/group.csv
+    if [ -f $group_file ]; then
+        filename=$(basename -- "$group_file")
+        filename="${filename%.*}"
 
-#         gam csv $group_file \
-#         gam update \
-#             group ~group_email \
-#             sync member notsuspended nomail \
-#             ou_and_children "/Students/~~region~~"
-#     fi
-#     printf "\n"
+        gam csv $group_file \
+        gam update \
+            group ~group_email \
+            sync member notsuspended nomail \
+            ou_and_children "/Students/~~region~~"
+    fi
+    printf "\n"
 
-#     printf "$region - Creating Reset Student PW admins...\n"
-#     admin_file=$dir/admin_create.csv
-#     if [ -f $admin_file ]; then
-#         filename=$(basename -- "$admin_file")
-#         filename="${filename%.*}"
+    printf "$region - Creating Reset Student PW admins...\n"
+    admin_file=$dir/admin_create.csv
+    if [ -f $admin_file ]; then
+        filename=$(basename -- "$admin_file")
+        filename="${filename%.*}"
 
-#         gam csv $admin_file \
-#         gam create \
-#             admin ~user \
-#             "Reset Student PW" \
-#             org_unit "~~OU~~"
+        gam csv $admin_file \
+        gam create \
+            admin ~user \
+            "Reset Student PW" \
+            org_unit "~~OU~~"
 
-#         rm $admin_file
-#     else
-#         printf "\tNo admins to create!\n"
-#     fi
-#     printf "\n"
-# done
+        rm $admin_file
+    else
+        printf "\tNo admins to create!\n"
+    fi
+    printf "\n"
+done
 
-# for dir in $PROJECT_DIR/data/*/;
-# do
-#     dir=${dir%*/}
-#     region=${dir##*/}
+for dir in $PROJECT_DIR/data/*/;
+do
+    dir=${dir%*/}
+    region=${dir##*/}
 
-#     mkdir -p $PROJECT_DIR/data/$region
-#     mkdir -p $PROJECT_DIR/log/$region
+    mkdir -p $PROJECT_DIR/data/$region
+    mkdir -p $PROJECT_DIR/log/$region
 
-#     printf "$region - Updating users w/ pw...\n"
-#     update_pw_file=$dir/user_update_pw.csv
-#     if [ -f $update_pw_file ]; then
-#         printf "$update_pw_file\n"
+    printf "$region - Updating users w/ pw...\n"
+    update_pw_file=$dir/user_update_pw.csv
+    if [ -f $update_pw_file ]; then
+        printf "$update_pw_file\n"
 
-#         filename=$(basename -- "$update_pw_file")
-#         filename="${filename%.*}"
+        filename=$(basename -- "$update_pw_file")
+        filename="${filename%.*}"
 
-#         gam csv $update_pw_file \
-#         gam update \
-#             user ~primaryEmail \
-#             firstname ~firstname \
-#             lastname ~lastname \
-#             suspended ~suspended_x \
-#             org ~org \
-#             password ~password
+        gam csv $update_pw_file \
+        gam update \
+            user ~primaryEmail \
+            firstname ~firstname \
+            lastname ~lastname \
+            suspended ~suspended_x \
+            org ~org \
+            password ~password
 
-#         rm $update_pw_file
-#     else
-#         printf "\tNo users to update w/ pw!\n"
-#     fi
-#     printf "\n"
+        rm $update_pw_file
+    else
+        printf "\tNo users to update w/ pw!\n"
+    fi
+    printf "\n"
 
-#     printf "$region - Updating users w/o pw...\n"
-#     update_nopw_file=$dir/user_update_nopw.csv
-#     if [ -f $update_nopw_file ]; then
-#         printf "$update_nopw_file\n"
+    printf "$region - Updating users w/o pw...\n"
+    update_nopw_file=$dir/user_update_nopw.csv
+    if [ -f $update_nopw_file ]; then
+        printf "$update_nopw_file\n"
 
-#         filename=$(basename -- "$update_nopw_file")
-#         filename="${filename%.*}"
+        filename=$(basename -- "$update_nopw_file")
+        filename="${filename%.*}"
 
-#         gam csv $update_nopw_file \
-#         gam update \
-#             user ~primaryEmail \
-#             firstname ~firstname \
-#             lastname ~lastname \
-#             suspended ~suspended_x \
-#             org ~org
+        gam csv $update_nopw_file \
+        gam update \
+            user ~primaryEmail \
+            firstname ~firstname \
+            lastname ~lastname \
+            suspended ~suspended_x \
+            org ~org
 
-#         rm $update_nopw_file
-#     else
-#         printf "\tNo users to update w/o pw!\n"
-#     fi
-#     printf "\n"
-# done
+        rm $update_nopw_file
+    else
+        printf "\tNo users to update w/o pw!\n"
+    fi
+    printf "\n"
+done
