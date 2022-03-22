@@ -56,17 +56,17 @@ users_merge_df["suspended_x_bool"] = users_merge_df.suspended_x.apply(
 
 # filter out completely inactive
 users_merge_df = users_merge_df[
-    ~((users_merge_df.suspended_x == "on") & (users_merge_df.suspended_y is True))
+    ~((users_merge_df.suspended_x == "on") & (users_merge_df.suspended_y))
 ]
 
 # users to CREATE
-users_create_df = users_merge_df[users_merge_df.google_exists is False]
+users_create_df = users_merge_df[~users_merge_df.google_exists]
 users_create_df = users_create_df[users_create_df.suspended_x == "off"]
 split_and_save(users_create_df, "region", "user_create")
 
 # users to UPDATE (all)
 users_update_df = users_merge_df[
-    (users_merge_df.google_exists is True)
+    (users_merge_df.google_exists)
     & (
         (users_merge_df["firstname"] != users_merge_df["name.givenName"])
         | (users_merge_df["lastname"] != users_merge_df["name.familyName"])
@@ -114,5 +114,5 @@ admins_merge_df = pd.merge(
 admins_merge_df["google_exists"] = admins_merge_df.assignedToUser.apply(pd.notnull)
 
 # admins to CREATE
-admins_create_df = admins_merge_df[admins_merge_df.google_exists is False]
+admins_create_df = admins_merge_df[~admins_merge_df.google_exists]
 split_and_save(admins_create_df, "region", "admin_create")
