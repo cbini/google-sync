@@ -32,4 +32,4 @@ _.env_file = ".env"
 transform.cmd = "python google_sync/prep-gam-files.py"
 transform.site_packages = true
 sync.cmd = "bash ./google_sync/sync-google.sh"
-transform.site_packages = true
+sync.site_packages = true
