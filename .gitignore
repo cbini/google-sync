@@ -134,3 +134,4 @@ dev/
 archive/
 log/
 .bash_secrets
+.pdm.toml
