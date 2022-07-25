@@ -8,11 +8,6 @@ export GAM_THREADS=$GAM_THREADS
 mkdir -p $PROJECT_DIR/data/users
 mkdir -p $PROJECT_DIR/log/users
 
-printf "Extracting user files from database...\n"
-cd $DATAGUN_DIR
-pdm run extract --config ./datagun/config/gapps-users.json
-printf "\n"
-
 cd $PROJECT_DIR
 
 printf "Exporting existing users from Google to $GAM_USERS_EXPORT_FILE\n"
