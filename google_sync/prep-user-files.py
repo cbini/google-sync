@@ -13,7 +13,7 @@ def split_and_save(df, group_col, base_filename):
     print(f"Saving {base_filename} files...")
     if df.shape[0] > 0:
         for v, d in df.groupby(group_col):
-            data_path = PROJECT_PATH / "data" / v.lower()
+            data_path = PROJECT_PATH / "data" / "users" / v.lower()
             if not data_path.exists():
                 data_path.mkdir(parents=True)
 
