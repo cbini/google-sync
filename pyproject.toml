@@ -17,11 +17,7 @@ Homepage = ""
 [tool]
 [tool.pdm]
 [tool.pdm.dev-dependencies]
-dev = [
-    "black>=22.1.0",
-    "flake8>=4.0.1",
-    "pytest>=7.1.0",
-]
+dev = []
 
 [build-system]
 requires = ["pdm-pep517>=0.12.0"]
@@ -29,7 +25,7 @@ build-backend = "pdm.pep517.api"
 
 [tool.pdm.scripts]
 _.env_file = ".env"
-transform.cmd = "python google_sync/prep-gam-files.py"
-transform.site_packages = true
-sync.cmd = "bash ./google_sync/sync-google.sh"
-sync.site_packages = true
+prep-admins.cmd = "python google_sync/prep-admin-files.py"
+prep-users.cmd = "python google_sync/prep-user-files.py"
+gam-admins.cmd = "bash ./google_sync/gam-admins.sh"
+gam-users.cmd = "bash ./google_sync/gam-users.sh"
