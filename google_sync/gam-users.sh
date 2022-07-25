@@ -19,6 +19,7 @@ printf "Transforming final sync file\n"
 pdm run prep-admins
 printf "\n"
 
+# setup
 for dir in $PROJECT_DIR/data/users/*/;
 do
     dir=${dir%*/}
@@ -26,7 +27,11 @@ do
 
     mkdir -p $PROJECT_DIR/data/users/$region
     mkdir -p $PROJECT_DIR/log/users/$region
+done    
 
+# create new
+for dir in $PROJECT_DIR/data/users/*/;
+do
     printf "$region - Creating users...\n"
     create_file=$dir/user_create.csv
     if [ -f $create_file ]; then
@@ -50,7 +55,11 @@ do
         printf "\tNo users to create!\n"
     fi
     printf "\n"
+done    
 
+# update existing
+for dir in $PROJECT_DIR/data/users/*/;
+do
     printf "$region - Updating users w/ pw...\n"
     update_pw_file=$dir/user_update_pw.csv
     if [ -f $update_pw_file ]; then
@@ -95,7 +104,11 @@ do
         printf "\tNo users to update w/o pw!\n"
     fi
     printf "\n"
+done
 
+# sync groups
+for dir in $PROJECT_DIR/data/users/*/;
+do
     printf "$region - Syncing user group membership...\n"
     group_file=$dir/group.csv
     if [ -f $group_file ]; then

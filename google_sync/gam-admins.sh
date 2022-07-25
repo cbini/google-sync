@@ -5,8 +5,8 @@ export PROJECT_DIR=$(dirname $FILEPATH)
 
 export GAM_THREADS=$GAM_THREADS
 
-mkdir -p $PROJECT_DIR/data
-mkdir -p $PROJECT_DIR/log
+mkdir -p $PROJECT_DIR/data/admins
+mkdir -p $PROJECT_DIR/log/admins
 
 cd $PROJECT_DIR
 
@@ -18,13 +18,13 @@ printf "Transforming final sync file\n"
 pdm run prep-users
 printf "\n"
 
-for dir in $PROJECT_DIR/data/*/;
+for dir in $PROJECT_DIR/data/admins/*/;
 do
     dir=${dir%*/}
     region=${dir##*/}
 
-    mkdir -p $PROJECT_DIR/data/$region
-    mkdir -p $PROJECT_DIR/log/$region
+    mkdir -p $PROJECT_DIR/data/admins/$region
+    mkdir -p $PROJECT_DIR/log/admins/$region
 
     printf "$region - Creating Reset Student PW admins...\n"
     admin_file=$dir/admin_create.csv
