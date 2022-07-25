@@ -15,7 +15,7 @@ gam print admins role "Reset Student PW" > $GAM_ADMINS_EXPORT_FILE
 printf "\n"
 
 printf "Transforming final sync file\n"
-pdm run prep-users
+pdm run prep-admins
 printf "\n"
 
 for dir in $PROJECT_DIR/data/admins/*/;

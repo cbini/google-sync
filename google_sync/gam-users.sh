@@ -16,7 +16,7 @@ gam print users domain $GOOGLE_STUDENTS_DOMAIN firstname lastname ou suspended \
 printf "\n"
 
 printf "Transforming final sync file\n"
-pdm run prep-admins
+pdm run prep-users
 printf "\n"
 
 # setup
