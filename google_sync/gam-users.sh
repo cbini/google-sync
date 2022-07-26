@@ -8,8 +8,6 @@ export GAM_THREADS=$GAM_THREADS
 mkdir -p $PROJECT_DIR/data/users
 mkdir -p $PROJECT_DIR/log/users
 
-cd $PROJECT_DIR
-
 printf "Exporting existing users from Google to $GAM_USERS_EXPORT_FILE\n"
 gam print users domain $GOOGLE_STUDENTS_DOMAIN firstname lastname ou suspended \
     > $GAM_USERS_EXPORT_FILE
@@ -60,29 +58,6 @@ done
 # update existing
 for dir in $PROJECT_DIR/data/users/*/;
 do
-    printf "$region - Updating users w/ pw...\n"
-    update_pw_file=$dir/user_update_pw.csv
-    if [ -f $update_pw_file ]; then
-        printf "$update_pw_file\n"
-
-        filename=$(basename -- "$update_pw_file")
-        filename="${filename%.*}"
-
-        gam csv $update_pw_file \
-        gam update \
-            user ~primaryEmail \
-            firstname ~firstname \
-            lastname ~lastname \
-            suspended ~suspended_x \
-            org ~org \
-            password ~password
-
-        rm $update_pw_file
-    else
-        printf "\tNo users to update w/ pw!\n"
-    fi
-    printf "\n"
-
     printf "$region - Updating users w/o pw...\n"
     update_nopw_file=$dir/user_update_nopw.csv
     if [ -f $update_nopw_file ]; then

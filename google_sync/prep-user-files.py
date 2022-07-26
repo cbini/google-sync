@@ -71,16 +71,7 @@ def main():
         )
     ]
     users_update_df["changepassword"] = "off"
-
-    # users to UPDATE (with password)
-    users_update_df_pw = users_update_df[users_update_df.school_level == "ES"]
-    split_and_save(users_update_df_pw, "region", "user_update_pw")
-
-    # users to UPDATE (password)
-    users_update_df_nopw = users_update_df[
-        users_update_df.school_level.isin(["MS", "HS", "OD"])
-    ]
-    split_and_save(users_update_df_nopw, "region", "user_update_nopw")
+    split_and_save(users_update_df, "region", "user_update")
 
     # group SYNC
     group_df = users_merge_df[["group_email", "region"]].drop_duplicates()
