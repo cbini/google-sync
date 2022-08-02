@@ -25,7 +25,7 @@ do
     mkdir -p $PROJECT_DIR/log/admins/$region
 
     printf "$region - Creating Reset Student PW admins...\n"
-    admin_file=$dir/admin_create.csv
+    admin_file=${dir}admin_create.csv
     if [ -f $admin_file ]; then
         filename=$(basename -- "$admin_file")
         filename="${filename%.*}"
