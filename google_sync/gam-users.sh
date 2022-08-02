@@ -22,9 +22,7 @@ printf "\n"
 # setup
 for dir in $PROJECT_DIR/data/users/*/;
 do
-    dir=${dir%*/}
     region=${dir##*/}
-
     mkdir -p $PROJECT_DIR/data/users/$region
     mkdir -p $PROJECT_DIR/log/users/$region
 done    
@@ -32,7 +30,7 @@ done
 # create new
 for dir in $PROJECT_DIR/data/users/*/;
 do
-    printf "$region - Creating users...\n"
+    printf "${dir} - Creating users...\n"
     create_file=${dir}user_create.csv
     if [ -f $create_file ]; then
         printf "$create_file\n"
@@ -60,7 +58,7 @@ done
 # update existing
 for dir in $PROJECT_DIR/data/users/*/;
 do
-    printf "$region - Updating users w/o pw...\n"
+    printf "${dir} - Updating users w/o pw...\n"
     update_file=${dir}user_update_nopw.csv
     if [ -f $update_file ]; then
         printf "$update_file\n"
@@ -86,8 +84,8 @@ done
 # sync groups
 for dir in $PROJECT_DIR/data/users/*/;
 do
-    printf "$region - Syncing user group membership...\n"
-    group_file=$dir/group.csv
+    printf "${dir} - Syncing user group membership...\n"
+    group_file=${dir}group.csv
     if [ -f $group_file ]; then
         filename=$(basename -- "$group_file")
         filename="${filename%.*}"
