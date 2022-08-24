@@ -58,7 +58,7 @@ done
 # update existing
 for dir in "${PROJECT_DIR}"/data/users/*/; do
 	printf "%s - Updating users w/o pw...\n" "${dir}"
-	update_file=${dir}user_update_nopw.csv
+	update_file=${dir}user_update.csv
 	if [[ -f ${update_file} ]]; then
 		printf "%s\n" "${update_file}"
 
