@@ -3,11 +3,10 @@ name = ""
 version = ""
 description = ""
 authors = [
-    {name = "Charlie Bini", email = "5003326+cbini@users.noreply.github.com"},
+  { name = "Charlie Bini", email = "5003326+cbini@users.noreply.github.com" },
 ]
 license-expression = "MIT"
-dependencies = [
-    "pandas>=1.4.1"]
+dependencies = ["pandas>=1.4.1"]
 requires-python = ">=3.9"
 
 [project.urls]
