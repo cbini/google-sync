@@ -1,11 +1,14 @@
 # google-sync
 
 1. install gam (gapps admin)
+
    ```sh
    bash <(curl -s -S -L https://git.io/install-gam)
    ```
+
 2. install requirements.txt
 3. create .env
+
    ```env
    GAM_THREADS
    GOOGLE_STUDENTS_DOMAIN

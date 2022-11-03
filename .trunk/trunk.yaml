@@ -1,29 +1,32 @@
 version: 0.1
 cli:
   version: 1.0.1
-lint:
-  enabled:
-    - actionlint@1.6.22
-    - black@22.10.0
-    - flake8@5.0.4
-    - git-diff-check@SYSTEM
-    - gitleaks@8.15.0
-    - isort@5.10.1
-    - markdownlint@0.32.2
-    - prettier@2.7.1
-    - shellcheck@0.8.0
-    - shfmt@3.5.0
-    - taplo@0.7.0
-actions:
-  enabled:
-    - trunk-upgrade-available
 plugins:
   sources:
     - id: trunk
       ref: v0.0.6
       uri: https://github.com/trunk-io/plugins
+lint:
+  enabled:
+    - shfmt@3.5.0
+    - gitleaks@8.15.0
+    - taplo@0.7.0
+    - markdownlint@0.32.2
+    - shellcheck@0.8.0
+    - black@22.10.0
+    - git-diff-check
+    - isort@5.10.1
+    - flake8@5.0.4
+    - prettier@2.7.1
+    - actionlint@1.6.22
 runtimes:
   enabled:
     - go@1.18.3
     - node@16.14.2
     - python@3.10.3
+actions:
+  enabled:
+    - trunk-announce
+    - trunk-check-pre-push
+    - trunk-fmt-pre-commit
+    - trunk-upgrade-available

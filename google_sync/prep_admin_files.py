@@ -3,21 +3,18 @@ import pathlib
 
 import pandas as pd
 
-GAM_ADMINS_EXPORT_FILE = os.getenv("GAM_ADMINS_EXPORT_FILE").replace("$HOME", "~")
-DB_ADMINS_EXPORT_FILE = os.getenv("DB_ADMINS_EXPORT_FILE").replace("$HOME", "~")
-
-PROJECT_PATH = pathlib.Path(__file__).absolute().parent
-
 
 def split_and_save(df, group_col, base_filename):
+    script_dir = pathlib.Path(__file__).absolute().parent
+
     print(f"Saving {base_filename} files...")
     if df.shape[0] > 0:
         for v, d in df.groupby(group_col):
-            data_path = PROJECT_PATH / "data" / "admins" / v.lower()
-            if not data_path.exists():
-                data_path.mkdir(parents=True)
+            admins_data_dir = script_dir / "data" / "admins" / v.lower()
+            if not admins_data_dir.exists():
+                admins_data_dir.mkdir(parents=True)
 
-            filepath = data_path / f"{base_filename}.csv"
+            filepath = admins_data_dir / f"{base_filename}.csv"
             d.to_csv(filepath, index=False)
             print(f"\t{filepath}")
         print()
@@ -30,11 +27,15 @@ def main():
 
     # load existing admins into df
     print("Loading admins from database...\n")
-    db_admins_df = pd.read_json(DB_ADMINS_EXPORT_FILE)
+    db_admins_df = pd.read_json(
+        os.getenv("DB_ADMINS_EXPORT_FILE").replace("$HOME", "~")
+    )
 
     # load db admins into df
     print("Loading admins from GAM...\n")
-    gam_admins_df = pd.read_csv(GAM_ADMINS_EXPORT_FILE)
+    gam_admins_df = pd.read_csv(
+        os.getenv("GAM_ADMINS_EXPORT_FILE").replace("$HOME", "~")
+    )
     gam_admins_df["assignedToUser_lower"] = gam_admins_df["assignedToUser"].str.lower()
 
     # join the dataframes on google email and OU

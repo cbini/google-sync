@@ -3,21 +3,18 @@ import pathlib
 
 import pandas as pd
 
-GAM_USERS_EXPORT_FILE = os.getenv("GAM_USERS_EXPORT_FILE").replace("$HOME", "~")
-DB_USERS_EXPORT_FILE = os.getenv("DB_USERS_EXPORT_FILE").replace("$HOME", "~")
-
-PROJECT_PATH = pathlib.Path(__file__).absolute().parent
-
 
 def split_and_save(df, group_col, base_filename):
+    script_dir = pathlib.Path(__file__).absolute().parent
+
     print(f"Saving {base_filename} files...")
     if df.shape[0] > 0:
         for v, d in df.groupby(group_col):
-            data_path = PROJECT_PATH / "data" / "users" / v.lower()
-            if not data_path.exists():
-                data_path.mkdir(parents=True)
+            users_data_dir = script_dir / "data" / "users" / v.lower()
+            if not users_data_dir.exists():
+                users_data_dir.mkdir(parents=True)
 
-            filepath = data_path / f"{base_filename}.csv"
+            filepath = users_data_dir / f"{base_filename}.csv"
             d.to_csv(filepath, index=False)
             print(f"\t{filepath}")
         print()
@@ -30,11 +27,11 @@ def main():
 
     # load database export into df
     print("Loading users from database...\n")
-    db_users_df = pd.read_json(DB_USERS_EXPORT_FILE)
+    db_users_df = pd.read_json(os.getenv("DB_USERS_EXPORT_FILE").replace("$HOME", "~"))
 
     # load existing users into df
     print("Loading users from GAM...\n")
-    gam_users_df = pd.read_csv(GAM_USERS_EXPORT_FILE)
+    gam_users_df = pd.read_csv(os.getenv("GAM_USERS_EXPORT_FILE").replace("$HOME", "~"))
 
     # join the dataframes on google email
     print("Matching users from database to Google...\n")
