@@ -24,8 +24,9 @@ build-backend = "pdm.pep517.api"
 
 [tool.pdm.scripts]
 _.env_file = ".env"
-prep-admins.cmd = "python google_sync/prep-admin-files.py"
-prep-users.cmd = "python google_sync/prep-user-files.py"
-gam-admins.cmd = "bash ./google_sync/gam-admins.sh"
-gam-users.cmd = "bash ./google_sync/gam-users.sh"
-gam-update.cmd = "bash <(curl -s -S -L https://gam-shortn.appspot.com/gam-install) -l"
+prep-admins = {cmd = "python google_sync/prep-admin-files.py"}
+prep-users = {cmd = "python google_sync/prep-user-files.py"}
+gam-admins = {cmd = "bash ./google_sync/gam-admins.sh"}
+gam-users = {cmd = "bash ./google_sync/gam-users.sh"}
+gam-update = {cmd = "bash <(curl -s -S -L https://gam-shortn.appspot.com/gam-install) -l"}
+post_lock = { shell = "pdm export -f requirements > requirements.txt" }
